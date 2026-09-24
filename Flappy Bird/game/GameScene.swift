@@ -185,6 +185,7 @@ final class GameScene: SKScene {
 
     private var gameStartTime: TimeInterval = 0
     private var lastFlapTime: TimeInterval = 0
+    private var lastUpdateTime: TimeInterval = 0
 
     private var isWaitingToStart = false
     private var isGameOver = false
@@ -236,13 +237,19 @@ final class GameScene: SKScene {
     // MARK: Textures
 
     private let pipeTextureUp =
-        Assets.shared.sprites.textureNamed("PipeUp")
+        Assets.shared.sprites.textureNamed("PipeUp").then {
+            $0.filteringMode = .nearest
+        }
 
     private let pipeTextureDown =
-        Assets.shared.sprites.textureNamed("PipeDown")
+        Assets.shared.sprites.textureNamed("PipeDown").then {
+            $0.filteringMode = .nearest
+        }
 
     private let groundTexture =
-        Assets.shared.sprites.textureNamed("land")
+        Assets.shared.sprites.textureNamed("land").then {
+            $0.filteringMode = .nearest
+        }
 
     private let gameOverTexture =
         Assets.shared.sprites.textureNamed("gameover")
@@ -263,10 +270,14 @@ final class GameScene: SKScene {
         Assets.shared.sprites.textureNamed("flappyplay")
 
     private let dayTexture =
-        Assets.shared.sprites.textureNamed("day-sky")
+        Assets.shared.sprites.textureNamed("day-sky").then {
+            $0.filteringMode = .nearest
+        }
 
     private let nightTexture =
-        Assets.shared.sprites.textureNamed("night-sky")
+        Assets.shared.sprites.textureNamed("night-sky").then {
+            $0.filteringMode = .nearest
+        }
 
     // MARK: Scene Nodes
 
@@ -829,7 +840,7 @@ final class GameScene: SKScene {
         }
     }
 
-    private func updateBirdRotation() {
+    private func updateBirdRotation(deltaTime: TimeInterval) {
         guard let physicsBody = bird.physicsBody,
               physicsBody.isDynamic else {
             return
@@ -854,8 +865,11 @@ final class GameScene: SKScene {
             0.6
         )
 
+        // Ease 15% per 60 Hz frame, independent of the actual frame rate.
+        let easing = 1 - pow(0.85, CGFloat(deltaTime * 60))
+
         bird.zRotation +=
-            (targetRotation - bird.zRotation) * 0.15
+            (targetRotation - bird.zRotation) * easing
 
         bird.speed = targetRotation < -0.7 ? 2 : 1
     }
@@ -863,11 +877,16 @@ final class GameScene: SKScene {
     // MARK: Game Loop
 
     override func update(_ currentTime: TimeInterval) {
+        let deltaTime = lastUpdateTime > 0
+            ? min(currentTime - lastUpdateTime, 1.0 / 30)
+            : 0
+        lastUpdateTime = currentTime
+
         guard !hasHitGround else {
             return
         }
 
-        updateBirdRotation()
+        updateBirdRotation(deltaTime: deltaTime)
     }
 
     // MARK: Input

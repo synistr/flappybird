@@ -18,6 +18,8 @@ class GameViewController: UIViewController {
     override var shouldAutorotate: Bool { false }
     override var prefersStatusBarHidden: Bool { true }
     override var canBecomeFirstResponder: Bool { true }
+    override var prefersHomeIndicatorAutoHidden: Bool { true }
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { .bottom }
     var preferredFramesPerSecond: Int { 120 }
     
     lazy var scene = GameScene(fileNamed: "GameScene")?.then {
@@ -26,6 +28,7 @@ class GameViewController: UIViewController {
     
     override func loadView() {
         view = SKView().then {
+            $0.preferredFramesPerSecond = preferredFramesPerSecond
             $0.ignoresSiblingOrder = true
             $0.showsFPS = false
             $0.showsNodeCount = false
