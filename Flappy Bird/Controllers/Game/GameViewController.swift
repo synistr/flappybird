@@ -28,7 +28,6 @@ class GameViewController: UIViewController {
     
     override func loadView() {
         view = SKView().then {
-            $0.preferredFramesPerSecond = preferredFramesPerSecond
             $0.ignoresSiblingOrder = true
             $0.showsFPS = false
             $0.showsNodeCount = false

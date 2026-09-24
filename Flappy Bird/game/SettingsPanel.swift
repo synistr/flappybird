@@ -12,13 +12,14 @@ struct SettingsPositions {
     static let toggleOnX: CGFloat = 68
     static let toggleOffX: CGFloat = 46
     
-    static let soundToggleY: CGFloat = 60
-    static let newBirdsToggleY: CGFloat = 24
-    static let hapticsToggleY: CGFloat = -12
-    static let adaptiveBackgroundToggleY: CGFloat = -56
+    static let soundToggleY: CGFloat = 78
+    static let newBirdsToggleY: CGFloat = 42
+    static let hapticsToggleY: CGFloat = 6
+    static let adaptiveBackgroundToggleY: CGFloat = -38
+    static let highFrameRateToggleY: CGFloat = -80
     
     static let backButtonX: CGFloat = -92
-    static let backButtonY: CGFloat = 85
+    static let backButtonY: CGFloat = 103
 }
 
 class SettingsPanel: SKSpriteNode {
@@ -41,6 +42,9 @@ class SettingsPanel: SKSpriteNode {
         
         addChild(adaptiveBackgroundToggle)
         addChild(adaptiveBackgroundButton)
+        
+        addChild(highFrameRateToggle)
+        addChild(highFrameRateButton)
     }
     
     lazy var versionLabel = MKOutlinedLabelNode(fontNamed: "KongtextRegular", fontSize: 12).then {
@@ -114,6 +118,19 @@ class SettingsPanel: SKSpriteNode {
     lazy var adaptiveBackgroundButton = SKSpriteNode().then {
         $0.name = "toggleAdaptiveBackground"
         $0.position = CGPoint(x: SettingsPositions.toggleOffX + (SettingsPositions.toggleOnX - SettingsPositions.toggleOffX) / 2, y: SettingsPositions.adaptiveBackgroundToggleY)
+        $0.zPosition = 3
+        $0.color = UIColor.clear
+        $0.size = CGSize(width: 45, height: 25)
+    }
+    
+    lazy var highFrameRateToggle = SKSpriteNode(texture: SKTexture(imageNamed: "toggle").then { $0.filteringMode = .nearest }).then {
+        $0.position = CGPoint(x: SettingsPositions.toggleOnX, y: SettingsPositions.highFrameRateToggleY)
+        $0.zPosition = 2
+    }
+    
+    lazy var highFrameRateButton = SKSpriteNode().then {
+        $0.name = "toggleHighFrameRate"
+        $0.position = CGPoint(x: SettingsPositions.toggleOffX + (SettingsPositions.toggleOnX - SettingsPositions.toggleOffX) / 2, y: SettingsPositions.highFrameRateToggleY)
         $0.zPosition = 3
         $0.color = UIColor.clear
         $0.size = CGSize(width: 45, height: 25)

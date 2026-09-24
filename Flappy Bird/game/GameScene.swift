@@ -198,6 +198,7 @@ final class GameScene: SKScene {
     private var newBirds = true
     private var haptics = true
     private var adaptiveBackground = false
+    private var highFrameRate = true
 
     private var skyNodes = [SKSpriteNode]()
     private var birdTextures = [SKTexture(), SKTexture(), SKTexture()]
@@ -451,7 +452,13 @@ final class GameScene: SKScene {
             defaultValue: false
         )
 
+        highFrameRate = loadBoolSetting(
+            key: "highFrameRate",
+            defaultValue: true
+        )
+
         updateSettingsUI()
+        applyFrameRate()
     }
 
     private func loadBoolSetting(
@@ -502,6 +509,17 @@ final class GameScene: SKScene {
                 : SettingsPositions.toggleOffX,
             y: SettingsPositions.adaptiveBackgroundToggleY
         )
+
+        settingsNode.highFrameRateToggle.position = CGPoint(
+            x: highFrameRate
+                ? SettingsPositions.toggleOnX
+                : SettingsPositions.toggleOffX,
+            y: SettingsPositions.highFrameRateToggleY
+        )
+    }
+
+    private func applyFrameRate() {
+        view?.preferredFramesPerSecond = highFrameRate ? 120 : 60
     }
 
     // MARK: Node Creation
@@ -628,7 +646,7 @@ final class GameScene: SKScene {
             $0.zPosition = GameZPosition.resultText + 4
             $0.position = CGPoint(
                 x: width / 2,
-                y: height / 2 + 15
+                y: height / 2 + 2
             )
         }
     }
@@ -929,6 +947,9 @@ final class GameScene: SKScene {
 
         case "toggleAdaptiveBackground":
             handleAdaptiveBackgroundToggle()
+
+        case "toggleHighFrameRate":
+            handleHighFrameRateToggle()
 
         case "settingsBack":
             handleSettingsBack()
@@ -1438,6 +1459,23 @@ final class GameScene: SKScene {
         )
 
         updateSky()
+    }
+
+    private func handleHighFrameRateToggle() {
+        playSound(swooshSound)
+
+        if haptics {
+            impactFeedback.impactOccurred()
+        }
+
+        toggle(
+            value: &highFrameRate,
+            key: "highFrameRate",
+            control: settingsNode.highFrameRateToggle,
+            y: SettingsPositions.highFrameRateToggleY
+        )
+
+        applyFrameRate()
     }
 
     // MARK: GitHub
