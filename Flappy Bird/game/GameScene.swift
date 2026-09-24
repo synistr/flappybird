@@ -238,19 +238,13 @@ final class GameScene: SKScene {
     // MARK: Textures
 
     private let pipeTextureUp =
-        Assets.shared.sprites.textureNamed("PipeUp").then {
-            $0.filteringMode = .nearest
-        }
+        Assets.shared.sprites.textureNamed("PipeUp")
 
     private let pipeTextureDown =
-        Assets.shared.sprites.textureNamed("PipeDown").then {
-            $0.filteringMode = .nearest
-        }
+        Assets.shared.sprites.textureNamed("PipeDown")
 
     private let groundTexture =
-        Assets.shared.sprites.textureNamed("land").then {
-            $0.filteringMode = .nearest
-        }
+        Assets.shared.sprites.textureNamed("land")
 
     private let gameOverTexture =
         Assets.shared.sprites.textureNamed("gameover")
@@ -271,14 +265,10 @@ final class GameScene: SKScene {
         Assets.shared.sprites.textureNamed("flappyplay")
 
     private let dayTexture =
-        Assets.shared.sprites.textureNamed("day-sky").then {
-            $0.filteringMode = .nearest
-        }
+        Assets.shared.sprites.textureNamed("day-sky")
 
     private let nightTexture =
-        Assets.shared.sprites.textureNamed("night-sky").then {
-            $0.filteringMode = .nearest
-        }
+        Assets.shared.sprites.textureNamed("night-sky")
 
     // MARK: Scene Nodes
 
